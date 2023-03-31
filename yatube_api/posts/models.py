@@ -31,6 +31,9 @@ class Post(models.Model):
     def __str__(self):
         return self.text
 
+    class Meta:
+        ordering = ['pub_date']
+
 
 class Comment(models.Model):
     """Модель Комментов."""
@@ -60,11 +63,11 @@ class Follow(models.Model):
 
     class Meta:
         verbose_name = 'Лента'
-        UniqueConstraint(fields=['author', 'user'],
+        UniqueConstraint(fields=['following', 'user'],
                          name='re-subscription')
         CheckConstraint(
             name='prevent_self_follow',
-            check=~models.Q(user=models.F('author')), )
+            check=~models.Q(user=models.F('following')), )
 
     def __str__(self):
         return '{} подписан на {}'.format(self.user, self.following)
